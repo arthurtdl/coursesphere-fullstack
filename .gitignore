@@ -1,0 +1,43 @@
+# --- Segurança e Segredos ---
+server/.env
+server/.env*.local
+server/config/master.key
+server/config/credentials/*.key
+server/config/initializers/secret_token.rb
+
+# --- Logs e Temporários (Caminhos relativos à raiz) ---
+server/log/*.log
+server/tmp/
+server/storage/*
+!server/storage/.keep
+
+# --- Banco de Dados ---
+# Ignora SQLite se você usar localmente, mas mantém a estrutura de pastas
+server/db/*.sqlite3
+server/db/*.sqlite3-journal
+server/db/*.sqlite3-[0-9]*
+
+# --- Dependências e Build ---
+server/node_modules/
+server/.bundle/
+server/vendor/bundle
+server/public/assets
+server/public/packs
+server/public/packs-test
+server/public/system
+server/public/uploads
+
+# --- Configurações de IDE e Sistema ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.orig
+rerun.txt
+
+# --- Ruby/Rails Extras ---
+*.rbc
+capybara-*.html
+.rspec
+/coverage/
+/spec/tmp
