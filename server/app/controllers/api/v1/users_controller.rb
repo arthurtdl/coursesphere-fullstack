@@ -1,43 +1,49 @@
-class Api::V1::UsersController < ApplicationController
-  before_action :set_user, only: [:show, :update, :destroy]
+# frozen_string_literal: true
 
-  # GET /api/v1/users/:id
-  def show
-    render json: UserRepresenter.new(@user).as_json
-  end
+module Api
+  module V1
+    class UsersController < ApplicationController
+      before_action :set_user, only: %i[show update destroy]
 
-  def create
-    @user = User.new(user_params)
+      # GET /api/v1/users/:id
+      def show
+        render json: UserRepresenter.new(@user).as_json
+      end
 
-    if @user.save
-      render json: UserRepresenter.new(@user).as_json, status: :created
-    else
-      render json: @user.errors, status: :unprocessable_entity
+      def create
+        @user = User.new(user_params)
+
+        if @user.save
+          render json: UserRepresenter.new(@user).as_json, status: :created
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
+      end
+
+      # PATCH/PUT /api/v1/users/:id
+      def update
+        if @user.update(user_params)
+          render json: UserRepresenter.new(@user).as_json
+        else
+          render json: @user.errors, status: :unprocessable_entity
+        end
+      end
+
+      # DELETE /api/v1/users/:id
+      def destroy
+        @user.destroy
+        head :no_content
+      end
+
+      private
+
+      def set_user
+        @user = User.find(params[:id])
+      end
+
+      def user_params
+        params.require(:user).permit(:name, :email, :password, :password_confirmation)
+      end
     end
-  end
-
-  # PATCH/PUT /api/v1/users/:id
-  def update
-    if @user.update(user_params)
-      render json: UserRepresenter.new(@user).as_json
-    else
-      render json: @user.errors, status: :unprocessable_entity
-    end
-  end
-
-  # DELETE /api/v1/users/:id
-  def destroy
-    @user.destroy
-    head :no_content
-  end
-
-  private
-
-  def set_user
-    @user = User.find(params[:id])
-  end
-
-  def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation)
   end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class CourseRepresenter
   def initialize(courses)
     @courses = courses

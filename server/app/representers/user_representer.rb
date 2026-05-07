@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserRepresenter
   def initialize(user)
     @user = user
@@ -16,5 +18,4 @@ class UserRepresenter
 
   # Provides read access to the user instance variable for use in the as_json method
   attr_reader :user
-
 end

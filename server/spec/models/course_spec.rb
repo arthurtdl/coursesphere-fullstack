@@ -1,7 +1,9 @@
+# frozen_string_literal: true
+
 require 'rails_helper'
 
 RSpec.describe Course, type: :model do
-  let(:user) { User.create(name: "Professor X", email: "profx@cin.ufpe.br", password: "password123") }
+  let(:user) { User.create(name: 'Professor X', email: 'profx@cin.ufpe.br', password: 'password123') }
 
   describe 'associations' do
     it 'belongs to an author' do
@@ -14,8 +16,8 @@ RSpec.describe Course, type: :model do
   describe 'validations' do
     it 'is valid with all attributes' do
       course = Course.new(
-        name: "Desenvolvimento Web com Rails",
-        description: "Aprenda a criar APIs robustas.",
+        name: 'Desenvolvimento Web com Rails',
+        description: 'Aprenda a criar APIs robustas.',
         start_date: DateTime.now,
         end_date: DateTime.now + 1.month,
         status: :draft,
@@ -40,7 +42,7 @@ RSpec.describe Course, type: :model do
     it 'defines statuses correctly' do
       course = Course.new(status: :draft)
       expect(course.draft?).to be true
-      
+
       course.status = :published
       expect(course.published?).to be true
     end
