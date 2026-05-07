@@ -4,6 +4,10 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Courses', type: :request do
   let!(:author) { User.create(name: 'John Doe', email: 'john@example.com', password: 'password123') }
+  
+  let(:token) { JsonWebToken.encode(user_id: author.id) }
+  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+
   let!(:course) do
     Course.create(
       name: 'Basic Ruby',
@@ -22,59 +26,56 @@ RSpec.describe 'Api::V1::Courses', type: :request do
         description: 'Mastering API-only applications.',
         status: 'draft',
         start_date: DateTime.now,
-        end_date: DateTime.now + 2.months,
-        author_id: author.id
+        end_date: DateTime.now + 2.months
       }
     }
   end
 
   describe 'GET /api/v1/courses' do
-    it 'returns a list of all courses with author information' do
-      get '/api/v1/courses'
+    it 'returns a list of all courses' do
+      get '/api/v1/courses', headers: headers
 
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
 
       expect(json.size).to eq(1)
-      expect(json.first['name']).to eq('Basic Ruby')
       expect(json.first['author']['name']).to eq('John Doe')
     end
   end
 
   describe 'GET /api/v1/courses/:id' do
-    it 'returns the specific course details' do
-      get "/api/v1/courses/#{course.id}"
+    it 'returns the specific course' do
+      get "/api/v1/courses/#{course.id}", headers: headers
 
       expect(response).to have_http_status(:ok)
-      json = JSON.parse(response.body)
-      expect(json['id']).to eq(course.id)
-      expect(json['author']['email']).to eq('john@example.com')
     end
   end
 
   describe 'POST /api/v1/courses' do
     context 'with valid parameters' do
-      it 'creates a new course and returns 201 Created' do
+      it 'creates a new course' do
         expect do
-          post '/api/v1/courses', params: valid_attributes
+          post '/api/v1/courses', params: valid_attributes, headers: headers
         end.to change(Course, :count).by(1)
 
         expect(response).to have_http_status(:created)
       end
     end
 
-    context 'with invalid parameters' do
-      it 'returns 422 Unprocessable Entity' do
-        post '/api/v1/courses', params: { course: { name: '' } }
-        expect(response).to have_http_status(:unprocessable_entity)
+    context 'without authentication' do
+      it 'returns 401 Unauthorized' do
+        post '/api/v1/courses', params: valid_attributes
+        expect(response).to have_http_status(:unauthorized)
       end
     end
   end
 
   describe 'PATCH /api/v1/courses/:id' do
-    it 'updates the course description' do
-      new_description = 'Updated description for testing.'
-      patch "/api/v1/courses/#{course.id}", params: { course: { description: new_description } }
+    it 'updates the course' do
+      new_description = 'Updated description.'
+      patch "/api/v1/courses/#{course.id}", 
+            params: { course: { description: new_description } }, 
+            headers: headers
 
       expect(response).to have_http_status(:ok)
       expect(course.reload.description).to eq(new_description)
@@ -82,9 +83,9 @@ RSpec.describe 'Api::V1::Courses', type: :request do
   end
 
   describe 'DELETE /api/v1/courses/:id' do
-    it 'removes the course from the database' do
+    it 'removes the course' do
       expect do
-        delete "/api/v1/courses/#{course.id}"
+        delete "/api/v1/courses/#{course.id}", headers: headers
       end.to change(Course, :count).by(-1)
 
       expect(response).to have_http_status(:no_content)

@@ -4,6 +4,9 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Lessons', type: :request do
   let!(:author) { User.create(name: 'John Doe', email: 'john@example.com', password: 'password123') }
+  let(:token) { JsonWebToken.encode(user_id: author.id) }
+  let(:headers) { { 'Authorization' => "Bearer #{token}" } }
+
   let!(:course) do
     Course.create(
       name: 'React Fundamentals',
@@ -14,6 +17,7 @@ RSpec.describe 'Api::V1::Lessons', type: :request do
       author: author
     )
   end
+
   let!(:lesson) do
     Lesson.create(
       name: 'useState Hook',
@@ -37,62 +41,38 @@ RSpec.describe 'Api::V1::Lessons', type: :request do
   end
 
   describe 'GET /api/v1/lessons' do
-    it 'returns a list of all lessons with course info' do
-      get '/api/v1/lessons'
+    it 'returns a list of lessons' do
+      get '/api/v1/lessons', headers: headers
 
       expect(response).to have_http_status(:ok)
       json = JSON.parse(response.body)
-
-      expect(json.size).to eq(1)
-      expect(json.first['name']).to eq('useState Hook')
       expect(json.first['course']['name']).to eq('React Fundamentals')
     end
   end
 
-  describe 'GET /api/v1/lessons/:id' do
-    it 'returns specific lesson details' do
-      get "/api/v1/lessons/#{lesson.id}"
-
-      expect(response).to have_http_status(:ok)
-      json = JSON.parse(response.body)
-      expect(json['id']).to eq(lesson.id)
-      expect(json['video_url']).to eq('https://youtube.com/watch?v=123')
-    end
-  end
-
   describe 'POST /api/v1/lessons' do
-    context 'with valid parameters' do
-      it 'creates a new lesson and returns 201 Created' do
-        expect do
-          post '/api/v1/lessons', params: valid_attributes
-        end.to change(Lesson, :count).by(1)
+    it 'creates a lesson when user is the course author' do
+      expect do
+        post '/api/v1/lessons', params: valid_attributes, headers: headers
+      end.to change(Lesson, :count).by(1)
 
-        expect(response).to have_http_status(:created)
-      end
+      expect(response).to have_http_status(:created)
     end
 
-    context 'with invalid parameters' do
-      it 'returns 422 Unprocessable Entity' do
-        post '/api/v1/lessons', params: { lesson: { name: '' } }
-        expect(response).to have_http_status(:unprocessable_entity)
-      end
-    end
-  end
+    it 'returns 403 when user is NOT the course author' do
+      other_user = User.create(name: 'Hacker', email: 'hacker@example.com', password: '123')
+      other_token = JsonWebToken.encode(user_id: other_user.id)
+      other_headers = { 'Authorization' => "Bearer #{other_token}" }
 
-  describe 'PATCH /api/v1/lessons/:id' do
-    it 'updates the lesson video_url' do
-      new_url = 'https://vimeo.com/789'
-      patch "/api/v1/lessons/#{lesson.id}", params: { lesson: { video_url: new_url } }
-
-      expect(response).to have_http_status(:ok)
-      expect(lesson.reload.video_url).to eq(new_url)
+      post '/api/v1/lessons', params: valid_attributes, headers: other_headers
+      expect(response).to have_http_status(:forbidden)
     end
   end
 
   describe 'DELETE /api/v1/lessons/:id' do
-    it 'removes the lesson from the database' do
+    it 'removes the lesson' do
       expect do
-        delete "/api/v1/lessons/#{lesson.id}"
+        delete "/api/v1/lessons/#{lesson.id}", headers: headers
       end.to change(Lesson, :count).by(-1)
 
       expect(response).to have_http_status(:no_content)

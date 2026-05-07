@@ -1,9 +1,9 @@
-# frozen_string_literal: true
-
 module Api
   module V1
     class CoursesController < ApplicationController
+      before_action :authenticate_request
       before_action :set_course, only: %i[show update destroy]
+      before_action :authorize_author, only: %i[update destroy]
 
       # GET /api/v1/courses
       def index
@@ -18,7 +18,7 @@ module Api
 
       # POST /api/v1/courses
       def create
-        @course = Course.new(course_params)
+        @course = current_user.courses.build(course_params)
 
         if @course.save
           render json: CourseRepresenter.new(@course).as_json, status: :created
@@ -48,8 +48,14 @@ module Api
         @course = Course.find(params[:id])
       end
 
+      def authorize_author
+        unless @course.author == current_user
+          render json: { error: 'Forbidden: You are not the author of this course' }, status: :forbidden
+        end
+      end
+
       def course_params
-        params.require(:course).permit(:name, :description, :start_date, :end_date, :status, :author_id)
+        params.require(:course).permit(:name, :description, :start_date, :end_date, :status)
       end
     end
   end

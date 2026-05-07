@@ -1,9 +1,9 @@
-# frozen_string_literal: true
-
 module Api
   module V1
     class LessonsController < ApplicationController
+      before_action :authenticate_request
       before_action :set_lesson, only: %i[show update destroy]
+      before_action :authorize_course_author, only: %i[create update destroy]
 
       # GET /api/v1/lessons
       def index
@@ -19,7 +19,6 @@ module Api
       # POST /api/v1/lessons
       def create
         @lesson = Lesson.new(lesson_params)
-
         if @lesson.save
           render json: LessonRepresenter.new(@lesson).as_json, status: :created
         else
@@ -46,6 +45,15 @@ module Api
 
       def set_lesson
         @lesson = Lesson.find(params[:id])
+      end
+
+      def authorize_course_author
+        course_id = params[:lesson] ? params[:lesson][:course_id] : @lesson.course_id
+        course = Course.find_by(id: course_id)
+
+        unless course&.author == current_user
+          render json: { error: 'Forbidden: Only the course author can manage lessons' }, status: :forbidden
+        end
       end
 
       def lesson_params

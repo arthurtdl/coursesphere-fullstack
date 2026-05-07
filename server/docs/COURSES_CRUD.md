@@ -24,7 +24,7 @@ Cada curso é obrigatoriamente vinculado a um autor (`User`) e as respostas são
 
 > **Importante:** Devido ao uso de *Strong Parameters*, os dados devem estar obrigatoriamente dentro da chave `"course"`.
 >
-> O campo `author_id` deve referenciar um usuário existente.
+> Não é necessário enviar author_id, pois o Rails identifica o autor automaticamente através do token enviado no Header.
 
 ```json
 {
@@ -33,8 +33,7 @@ Cada curso é obrigatoriamente vinculado a um autor (`User`) e as respostas são
     "description": "Learn how to build robust APIs from scratch.",
     "start_date": "2026-06-01T09:00:00",
     "end_date": "2026-12-01T18:00:00",
-    "status": "published",
-    "author_id": 1
+    "status": "published"
   }
 }
 ```
