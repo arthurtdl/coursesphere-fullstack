@@ -3,7 +3,7 @@
 import React from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
-import { Input, Button, Label, Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/index";
+import { Input, Button, Label, Tabs, TabsContent, TabsList, TabsTrigger} from "../index";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -94,7 +94,7 @@ export function AuthForm() {
                   data-[state=active]:shadow-md">Criar Conta</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="login" className="mt-6 animate-in fade-in-50 duration-300">
+          <TabsContent value="login" className="mt-6 min-h-105 animate-in fade-in-50 duration-300">
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-1.5">
                 <Label htmlFor="email" className="text-gray-700">Email</Label>
@@ -149,7 +149,7 @@ export function AuthForm() {
 
           <TabsContent
             value="register"
-            className="mt-6 animate-in fade-in-50 duration-300">
+            className="mt-6 min-h-105 animate-in fade-in-50 duration-300">
             <form onSubmit={handleRegister} className="space-y-4">
               <div className="space-y-1.5">
                 <Label htmlFor="name" className="text-gray-700">Nome Completo</Label>
