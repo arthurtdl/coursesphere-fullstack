@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class JsonWebToken
   # Search for the secret key in the environment
   SECRET_KEY = ENV.fetch('JWT_SECRET_KEY') { Rails.application.secret_key_base }
@@ -10,7 +12,7 @@ class JsonWebToken
   def self.decode(token)
     body = JWT.decode(token, SECRET_KEY)[0]
     HashWithIndifferentAccess.new(body)
-  rescue JWT::DecodeError => e
+  rescue JWT::DecodeError
     # If the token is invalid or expired, return nil
     nil
   end

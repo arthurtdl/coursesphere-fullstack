@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class CoursesController < ApplicationController
@@ -49,9 +51,9 @@ module Api
       end
 
       def authorize_author
-        unless @course.author == current_user
-          render json: { error: 'Forbidden: You are not the author of this course' }, status: :forbidden
-        end
+        return if @course.author == current_user
+
+        render json: { error: 'Forbidden: You are not the author of this course' }, status: :forbidden
       end
 
       def course_params
