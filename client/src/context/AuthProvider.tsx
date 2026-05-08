@@ -1,7 +1,7 @@
 import { useState, useMemo, type ReactNode } from "react";
 import { AuthContext } from "./AuthContext";
 import { authService } from "@/services/authService";
-import type { User } from "@/types/user";
+import type { User, RegisterCredentials } from "@/types/user";
 
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
     const [user, setUser] = useState<User | null>(() => {
@@ -24,6 +24,16 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         }
     };
 
+    const register = async (userData: RegisterCredentials) => {
+        setLoading(true);
+        try {
+            const data = await authService.register(userData);
+            setUser(data.user);
+        } finally {
+            setLoading(false);
+        }
+    };
+
     const logout = () => {
         authService.logout();
         setUser(null);
@@ -34,6 +44,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         isAuthenticated: !!user,
         loading,
         login,
+        register,
         logout
     }), [user, loading]);
 
