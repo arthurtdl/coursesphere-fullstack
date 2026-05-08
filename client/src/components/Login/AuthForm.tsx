@@ -3,15 +3,7 @@
 import React from "react";
 import { useAuth } from "@/hooks/useAuth";
 import { useState } from "react";
-import {
-  Input,
-  Button,
-  Label,
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../components/index";
+import { Input, Button, Label, Tabs, TabsContent, TabsList, TabsTrigger} from "../../components/index";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -90,42 +82,29 @@ export function AuthForm() {
         </p>
       </div>
 
-      <Tabs value={tab} onValueChange={setTab} className="w-full">
-        <div className="flex flex-col">
-          <TabsList>
-            <TabsTrigger
-              value="login"
-              className="data-[state=active]:shadow-sm"
-            >
-              Login
-            </TabsTrigger>
-            <TabsTrigger
-              value="register"
-              className="data-[state=active]:shadow-sm"
-            >
-              Criar Conta
-            </TabsTrigger>
+      <Tabs value={tab} onValueChange={setTab} className="flex w-full flex-col">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="login" className="rounded-md cursor-pointer text-black transition-all
+                data-[state=active]:bg-white
+                data-[state=active]:text-black
+                  data-[state=active]:shadow-md">Login</TabsTrigger>
+            <TabsTrigger value="register" className="rounded-md cursor-pointer text-black transition-all
+                data-[state=active]:bg-white
+                data-[state=active]:text-black
+                  data-[state=active]:shadow-md">Criar Conta</TabsTrigger>
           </TabsList>
 
-          <TabsContent
-            value="login"
-            className="mt-6 animate-in fade-in-50 duration-300"
-          >
+          <TabsContent value="login" className="mt-6 animate-in fade-in-50 duration-300">
             <form onSubmit={handleLogin} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email" className="text-gray-700">Email</Label>
                 <Input
                   id="email"
                   type="email"
                   placeholder="exemplo@email.com"
                   value={loginEmail}
                   onChange={(e) => setLoginEmail(e.target.value)}
-                  className={
-                    loginErr.email
-                      ? "border-destructive focus-visible:ring-destructive"
-                      : ""
-                  }
-                />
+                  className={`w-full bg-white border border-gray-200 shadow-md ${loginErr.email? "border-destructive focus-visible:ring-destructive" : ""}`}/>
                 {loginErr.email && (
                   <p className="text-xs text-destructive animate-in slide-in-from-top-1">
                     {loginErr.email}
@@ -134,11 +113,12 @@ export function AuthForm() {
               </div>
               <div className="space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <Label htmlFor="password">Senha</Label>
+                  <Label htmlFor="password" className="text-gray-700">
+                    Senha
+                  </Label>
                   <button
                     type="button"
-                    className="text-xs text-primary hover:underline"
-                  >
+                    className="text-xs text-primary hover:underline cursor-pointer">
                     Esqueceu a senha?
                   </button>
                 </div>
@@ -148,12 +128,7 @@ export function AuthForm() {
                   placeholder="••••••••"
                   value={loginPassword}
                   onChange={(e) => setLoginPassword(e.target.value)}
-                  className={
-                    loginErr.password
-                      ? "border-destructive focus-visible:ring-destructive"
-                      : ""
-                  }
-                />
+                  className={`w-full bg-white border border-gray-200 shadow-md ${loginErr.password? "border-destructive focus-visible:ring-destructive" : ""}`}/>
                 {loginErr.password && (
                   <p className="text-xs text-destructive animate-in slide-in-from-top-1">
                     {loginErr.password}
@@ -163,8 +138,7 @@ export function AuthForm() {
               <Button
                 type="submit"
                 className="w-full shadow-elegant cursor-pointer"
-                disabled={authLoading}
-              >
+                disabled={authLoading}>
                 {authLoading && (
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                 )}
@@ -175,69 +149,68 @@ export function AuthForm() {
 
           <TabsContent
             value="register"
-            className="mt-6 animate-in fade-in-50 duration-300"
-          >
+            className="mt-6 animate-in fade-in-50 duration-300">
             <form onSubmit={handleRegister} className="space-y-4">
               <div className="space-y-1.5">
-                <Label htmlFor="name">Nome Completo</Label>
+                <Label htmlFor="name" className="text-gray-700">Nome Completo</Label>
                 <Input
                   id="name"
                   placeholder="Seu nome"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
+                  className="w-full bg-white border border-gray-200 shadow-md"
                 />
                 {regErr.name && (
                   <p className="text-xs text-destructive">{regErr.name}</p>
                 )}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="reg-email">Email</Label>
+                <Label htmlFor="reg-email" className="text-gray-700">Email</Label>
                 <Input
                   id="reg-email"
                   type="email"
                   placeholder="exemplo@email.com"
                   value={regEmail}
                   onChange={(e) => setRegEmail(e.target.value)}
+                  className="w-full bg-white border border-gray-200 shadow-md"
                 />
                 {regErr.email && (
                   <p className="text-xs text-destructive">{regErr.email}</p>
                 )}
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="reg-pass">Senha</Label>
+                <Label htmlFor="reg-pass" className="text-gray-700">Senha</Label>
                 <Input
                   id="reg-pass"
                   type="password"
                   placeholder="••••••••"
                   value={regPassword}
                   onChange={(e) => setRegPassword(e.target.value)}
+                  className="w-full bg-white border border-gray-200 shadow-md"
                 />
               </div>
               <div className="space-y-1.5">
-                <Label htmlFor="conf-pass">Confirmar</Label>
+                <Label htmlFor="conf-pass" className="text-gray-700">Confirmar</Label>
                 <Input
                   id="conf-pass"
                   type="password"
                   placeholder="••••••••"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
+                  className="w-full bg-white border border-gray-200 shadow-md"
                 />
               </div>
               {(regErr.password || regErr.confirmPassword) && (
-                <p className="text-xs text-destructive">
-                  {regErr.password || regErr.confirmPassword}
-                </p>
+                <p className="text-xs text-destructive">{regErr.password || regErr.confirmPassword}</p>
               )}
               <Button
                 type="submit"
                 className="w-full shadow-elegant cursor-pointer"
-                disabled={authLoading}
-              >
+                disabled={authLoading}>
                 Criar conta
               </Button>
             </form>
           </TabsContent>
-        </div>
       </Tabs>
     </div>
   );
