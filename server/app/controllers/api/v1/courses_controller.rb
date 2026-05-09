@@ -9,8 +9,16 @@ module Api
 
       # GET /api/v1/courses
       def index
-        courses = Course.includes(:author).all
-        render json: CourseRepresenter.new(courses).as_json
+        @courses = Course.explore_for(current_user.id)
+
+        render json: @courses
+      end
+
+      # GET /api/v1/courses/mine
+      def mine
+        @courses = current_user.courses
+
+        render json: @courses
       end
 
       # GET /api/v1/courses/:id

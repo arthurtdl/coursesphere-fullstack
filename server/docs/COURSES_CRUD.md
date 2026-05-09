@@ -40,6 +40,15 @@ Cada curso é obrigatoriamente vinculado a um autor (`User`) e as respostas são
 
 ---
 
+### Lógica de Busca (Otimização)
+Para garantir escalabilidade, a filtragem é realizada via Active Record Scopes diretamente no banco de dados, evitando o carregamento de dados desnecessários na memória da aplicação.
+
+Scopes Utilizados:
+- is_published: Filtra apenas registros com status: 1.
+- explore_for(id): Executa um WHERE status = 1 AND author_id != id.
+
+---
+
 ### Comandos de Teste (RSpec)
 
 Para validar a integridade deste CRUD e dos relacionamentos, execute:

@@ -7,7 +7,8 @@ Rails.application.routes.draw do
     namespace :v1 do
       post 'auth/login', to: 'authentication#login'
       resources :users, only: %i[create show update destroy]
-      resources :courses
+      resources :courses do
+        get: :mine, on: :collection
       resources :lessons
     end
   end
