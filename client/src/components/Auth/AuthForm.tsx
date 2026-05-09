@@ -38,7 +38,7 @@ export function AuthForm() {
     try {
       await login({ email: loginEmail, password: loginPassword });
       toast.success("Bem-vindo de volta!");
-      navigate('/dashboard', { replace: true });
+      navigate('/dashboard/explore', { replace: true });
     } catch (error) {
       toast.error("Falha na autenticação. Verifique seus dados.");
       console.error("Login error:", error);

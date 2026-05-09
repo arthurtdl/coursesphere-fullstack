@@ -4,7 +4,7 @@ import { Login, ProtectedRoute, DashboardLayout, ExplorePage, MyCoursesPage } fr
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/dashboard" replace />,
+    element: <Navigate to="/dashboard/explore" replace />,
   },
   {
     path: '/login',
