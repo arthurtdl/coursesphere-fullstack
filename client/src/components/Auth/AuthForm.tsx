@@ -6,9 +6,11 @@ import { useState } from "react";
 import { Input, Button, Label, Tabs, TabsContent, TabsList, TabsTrigger} from "../index";
 import { Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useNavigate } from 'react-router-dom';
 
 export function AuthForm() {
   const { login, loading: authLoading, register } = useAuth();
+  const navigate = useNavigate();
   const [tab, setTab] = useState("login");
 
   // Login States
@@ -36,6 +38,7 @@ export function AuthForm() {
     try {
       await login({ email: loginEmail, password: loginPassword });
       toast.success("Bem-vindo de volta!");
+      navigate('/dashboard', { replace: true });
     } catch (error) {
       toast.error("Falha na autenticação. Verifique seus dados.");
       console.error("Login error:", error);

@@ -1,6 +1,7 @@
 // Auth
 export { AuthForm } from "./Auth/AuthForm"
 export { Login } from "./Auth/Login"
+export { ProtectedRoute } from "./Auth/ProtectedRoute"
 
 // Logo
 export { CourseSphere } from "./Logo/CourseSphere"
