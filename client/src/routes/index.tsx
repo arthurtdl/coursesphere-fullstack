@@ -1,16 +1,27 @@
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter, Navigate } from 'react-router-dom';
+import { Login } from '../components/Auth/Login';
+import { ProtectedRoute } from '../components/Auth/ProtectedRoute';
 
 export const router = createBrowserRouter([
   {
-    path: '/login',
-    element: <div>Login Page (Em breve)</div>,
+    path: '/',
+    element: <Navigate to="/dashboard" replace />,
   },
   {
-    path: '/dashboard',
-    element: <div>Dashboard (Em breve)</div>,
+    path: '/login',
+    element: <Login />,
+  },
+  {
+    element: <ProtectedRoute />,
+    children: [
+      {
+        path: '/dashboard',
+        element: <div className="p-8"><h1>Dashboard (Privado)</h1><p>Bem-vindo ao CourseSphere!</p></div>,
+      },
+    ],
   },
   {
     path: '*',
-    element: <div>Page Not Found (Em breve)</div>,
+    element: <div className="p-8 text-center">404 - Página não encontrada</div>,
   },
-])
+]);

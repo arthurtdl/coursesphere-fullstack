@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Api
   module V1
     class LessonsController < ApplicationController
@@ -51,9 +53,9 @@ module Api
         course_id = params[:lesson] ? params[:lesson][:course_id] : @lesson.course_id
         course = Course.find_by(id: course_id)
 
-        unless course&.author == current_user
-          render json: { error: 'Forbidden: Only the course author can manage lessons' }, status: :forbidden
-        end
+        return if course&.author == current_user
+
+        render json: { error: 'Forbidden: Only the course author can manage lessons' }, status: :forbidden
       end
 
       def lesson_params

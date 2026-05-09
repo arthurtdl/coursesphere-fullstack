@@ -4,7 +4,7 @@ require 'rails_helper'
 
 RSpec.describe 'Api::V1::Courses', type: :request do
   let!(:author) { User.create(name: 'John Doe', email: 'john@example.com', password: 'password123') }
-  
+
   let(:token) { JsonWebToken.encode(user_id: author.id) }
   let(:headers) { { 'Authorization' => "Bearer #{token}" } }
 
@@ -73,8 +73,8 @@ RSpec.describe 'Api::V1::Courses', type: :request do
   describe 'PATCH /api/v1/courses/:id' do
     it 'updates the course' do
       new_description = 'Updated description.'
-      patch "/api/v1/courses/#{course.id}", 
-            params: { course: { description: new_description } }, 
+      patch "/api/v1/courses/#{course.id}",
+            params: { course: { description: new_description } },
             headers: headers
 
       expect(response).to have_http_status(:ok)
