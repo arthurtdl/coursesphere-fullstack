@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { Search, Compass } from "lucide-react";
+import { Search, Compass, User } from "lucide-react";
 import { useExploreCourses } from "@/hooks/useCourses";
 import { CourseCard } from "@/components/Courses/CourseCard";
 import { Input } from "@/components/ui/input";
@@ -10,6 +10,7 @@ import { Pagination } from "@/components/Shared/Pagination";
 
 export function ExplorePage() {
   const [query, setQuery] = useState("");
+  const [authorQuery, setAuthorQuery] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 9;
 
@@ -17,10 +18,17 @@ export function ExplorePage() {
 
   const filteredCourses = useMemo(() => {
     if (!courses) return [];
-    return courses.filter((c) =>
-      c.name.toLowerCase().includes(query.toLowerCase()),
-    );
-  }, [query, courses]);
+    const nameMatch = query.toLowerCase();
+    const authorMatch = authorQuery.toLowerCase();
+
+    return courses.filter((c) => {
+      const matchesName = c.name.toLowerCase().includes(nameMatch);
+      const matchesAuthor = (c.author?.name || "")
+        .toLowerCase()
+        .includes(authorMatch);
+      return matchesName && matchesAuthor;
+    });
+  }, [query, authorQuery, courses]);
 
   const paginatedCourses = useMemo(() => {
     const start = (currentPage - 1) * itemsPerPage;
@@ -29,6 +37,11 @@ export function ExplorePage() {
 
   const handleSearch = (val: string) => {
     setQuery(val);
+    setCurrentPage(1);
+  };
+
+  const handleAuthorSearch = (val: string) => {
+    setAuthorQuery(val);
     setCurrentPage(1);
   };
 
@@ -59,14 +72,28 @@ export function ExplorePage() {
             próximo nível da sua carreira.
           </p>
 
-          <div className="relative mt-8 max-w-xl">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-100" />
-            <Input
-              value={query}
-              onChange={(e) => handleSearch(e.target.value)}
-              placeholder="Buscar cursos por nome..."
-              className="h-14 w-full border-0 bg-white pl-12 text-base text-slate-100 shadow-md ring-offset-0 placeholder:text-slate-300 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-0"
-            />
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 max-w-4xl">
+            {/* Name Filter */}
+            <div className="relative flex-1">
+              <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-200" />
+              <Input
+                value={query}
+                onChange={(e) => handleSearch(e.target.value)}
+                placeholder="Nome do curso..."
+                className="h-14 w-full border-0 bg-white pl-12 text-base text-slate-100 shadow-md ring-offset-0 placeholder:text-slate-300 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-0"
+              />
+            </div>
+
+            {/* Author Filter */}
+            <div className="relative flex-1">
+              <User className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-200" />
+              <Input
+                value={authorQuery}
+                onChange={(e) => handleAuthorSearch(e.target.value)}
+                placeholder="Nome do instrutor..."
+                className="h-14 w-full border-0 bg-white pl-12 text-base text-slate-100 shadow-md ring-offset-0 placeholder:text-slate-300 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-0"
+              />
+            </div>
           </div>
         </div>
       </section>
@@ -93,14 +120,16 @@ export function ExplorePage() {
             {filteredCourses.length === 0 ? (
               <div className="mt-12 rounded-xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center shadow-sm">
                 <p className="text-slate-500 font-medium">
-                  {query ? `Nenhum resultado para "${truncate(query, 60)}"` : "Nenhum curso disponível"}
+                  {query
+                    ? `Nenhum resultado para "${truncate(query, 60)}"`
+                    : "Nenhum curso disponível"}
                 </p>
               </div>
             ) : (
-              <Pagination 
-                total={filteredCourses.length} 
-                perPage={itemsPerPage} 
-                onPageChange={setCurrentPage} 
+              <Pagination
+                total={filteredCourses.length}
+                perPage={itemsPerPage}
+                onPageChange={setCurrentPage}
               />
             )}
           </>
