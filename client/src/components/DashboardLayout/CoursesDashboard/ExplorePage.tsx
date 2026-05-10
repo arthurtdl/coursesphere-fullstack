@@ -3,6 +3,7 @@ import { Search, Compass } from "lucide-react";
 import { useExploreCourses } from "@/hooks/useCourses";
 import { CourseCard } from "@/components/Courses/CourseCard";
 import { Input } from "@/components/ui/input";
+import { truncate } from "@/lib/truncate";
 
 export function ExplorePage() {
   const [query, setQuery] = useState("");
@@ -43,12 +44,12 @@ export function ExplorePage() {
           </p>
 
           <div className="relative mt-8 max-w-xl">
-            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-400" />
+            <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-100" />
             <Input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Buscar cursos por nome..."
-              className="h-14 w-full border-0 bg-white pl-12 text-base text-slate-200 shadow-md ring-offset-0 placeholder:text-slate-300 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-0"
+              className="h-14 w-full border-0 bg-white pl-12 text-base text-slate-100 shadow-md ring-offset-0 placeholder:text-slate-300 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-0"
             />
           </div>
         </div>
@@ -76,7 +77,7 @@ export function ExplorePage() {
             {filteredCourses.length === 0 && (
               <div className="mt-12 rounded-xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center shadow-sm">
                 <p className="text-slate-500">
-                  Nenhum curso encontrado para "{query}".
+                  {query ? `Nenhum resultado para "${truncate(query, 60)}"` : "Nenhum curso disponível"}
                 </p>
               </div>
             )}
