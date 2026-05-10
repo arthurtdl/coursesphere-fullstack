@@ -45,7 +45,7 @@ export function CourseFormDialog({ open, onOpenChange }: Props) {
   } = useForm<CourseFormValues>({
     resolver: zodResolver(courseSchema),
     defaultValues: {
-      status: "draft", // Inicial state
+      status: "draft",
     }
   });
 
@@ -54,8 +54,8 @@ export function CourseFormDialog({ open, onOpenChange }: Props) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses", "mine"] });
       toast.success("Curso criado com sucesso!");
-      reset(); // Clear the form
-      onOpenChange(false); // Closes the form
+      reset();
+      onOpenChange(false);
     },
     onError: () => {
       toast.error("Erro ao criar curso. Tente novamente.");
@@ -74,39 +74,43 @@ export function CourseFormDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="sm:max-w-112.5 bg-white">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-bold">Novo Curso</DialogTitle>
-          <DialogDescription>Preencha os detalhes básicos para começar.</DialogDescription>
+      <DialogContent className="sm:max-w-115 bg-white p-8 border-none shadow-2xl rounded-2xl">
+        <DialogHeader className="space-y-2">
+          <DialogTitle className="text-2xl font-bold tracking-tight text-slate-900">
+            Novo Curso
+          </DialogTitle>
+          <DialogDescription className="text-slate-500 text-sm leading-relaxed">
+            Preencha as informações para organizar seu novo conteúdo.
+          </DialogDescription>
         </DialogHeader>
 
-        <form onSubmit={handleSubmit(onSave)} className="space-y-4 py-2">
-          {/* Name */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Nome</label>
+        <form onSubmit={handleSubmit(onSave)} className="space-y-6 mt-4">
+          {/* Name Field */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Nome do curso</label>
             <Input
               {...register("name")}
-              placeholder="Ex: React Mastery"
-              className="border-slate-200 focus-visible:ring-indigo-500"
+              placeholder="Ex: Curso de Programação"
+              className="bg-slate-50/50 border-slate-100 h-11 focus-visible:ring-indigo-500/20 focus-visible:border-indigo-500 transition-all"
             />
-            {errors.name && <p className="text-[10px] text-red-500">{errors.name.message}</p>}
+            {errors.name && <p className="text-[10px] text-red-500 font-medium px-1">{errors.name.message}</p>}
           </div>
 
-          {/* Description */}
-          <div className="space-y-1">
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Descrição</label>
-            <Textarea
-              {...register("description")}
-              placeholder="Do que trata o curso?"
-              className="resize-none border-slate-200 focus-visible:ring-indigo-500 min-h-20"
+          {/* Description Field */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Descrição</label>
+            <Textarea 
+            {...register("description")}
+            placeholder="Do que se trata o curso?"
+            className="w-full max-w-full max-h-24 break-all overflow-x-hiddenbg-slate-50/50 border-slate-100 resize-none min-h-25 focus-visible:ring-indigo-500/20 focus-visible:border-indigo-500 transition-all"
             />
-            {errors.description && <p className="text-[10px] text-red-500">{errors.description.message}</p>}
+            {errors.description && <p className="text-[10px] text-red-500 font-medium px-1">{errors.description.message}</p>}
           </div>
 
           {/* Dates */}
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Início</label>
+          <div className="grid grid-cols-2 gap-5">
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Data de Início</label>
               <Controller
                 control={control}
                 name="startDate"
@@ -116,25 +120,25 @@ export function CourseFormDialog({ open, onOpenChange }: Props) {
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full justify-start border-slate-200 text-left font-normal",
-                          !field.value && "text-muted-foreground"
+                          "w-full h-11 justify-start border-slate-100 bg-slate-50/50 px-3 font-normal text-slate-600 hover:bg-slate-100/50 transition-all",
+                          !field.value && "text-slate-400"
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4 text-slate-400" />
-                        {field.value ? format(field.value, "dd/MM/yyyy") : <span className="text-slate-400">Selecione</span>}
+                        <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
+                        {field.value ? format(field.value, "dd 'de' MMM", { locale: ptBR }) : <span>Início</span>}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-0 border-none shadow-xl" align="start">
                       <Calendar mode="single" selected={field.value} onSelect={field.onChange} locale={ptBR} />
                     </PopoverContent>
                   </Popover>
                 )}
               />
-              {errors.startDate && <p className="text-[10px] text-red-500">{errors.startDate.message}</p>}
+              {errors.startDate && <p className="text-[10px] text-red-500 font-medium px-1">{errors.startDate.message}</p>}
             </div>
 
-            <div className="space-y-1">
-              <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Término</label>
+            <div className="space-y-1.5">
+              <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Data de Término</label>
               <Controller
                 control={control}
                 name="endDate"
@@ -144,39 +148,39 @@ export function CourseFormDialog({ open, onOpenChange }: Props) {
                       <Button
                         variant="outline"
                         className={cn(
-                          "w-full justify-start border-slate-200 text-left font-normal",
-                          !field.value && "text-muted-foreground"
+                          "w-full h-11 justify-start border-slate-100 bg-slate-50/50 px-3 font-normal text-slate-600 hover:bg-slate-100/50 transition-all",
+                          !field.value && "text-slate-400"
                         )}
                       >
-                        <CalendarIcon className="mr-2 h-4 w-4 text-slate-400" />
-                        {field.value ? format(field.value, "dd/MM/yyyy") : <span className="text-slate-400">Selecione</span>}
+                        <CalendarIcon className="mr-2 h-4 w-4 opacity-70" />
+                        {field.value ? format(field.value, "dd 'de' MMM", { locale: ptBR }) : <span>Término</span>}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0" align="start">
+                    <PopoverContent className="w-auto p-0 border-none shadow-xl" align="start">
                       <Calendar mode="single" selected={field.value} onSelect={field.onChange} locale={ptBR} />
                     </PopoverContent>
                   </Popover>
                 )}
               />
-              {errors.endDate && <p className="text-[10px] text-red-500">{errors.endDate.message}</p>}
+              {errors.endDate && <p className="text-[10px] text-red-500 font-medium px-1">{errors.endDate.message}</p>}
             </div>
           </div>
 
-          {/* Segmented Control */}
-          <div className="space-y-1 pt-1">
-            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Status Inicial</label>
+          {/* Course Status */}
+          <div className="space-y-1.5">
+            <label className="text-[11px] font-semibold uppercase tracking-widest text-slate-400">Status de visibilidade</label>
             <Controller
               control={control}
               name="status"
               render={({ field }) => (
-                <div className="flex w-full rounded-md border border-slate-200 bg-slate-50 p-1">
+                <div className="flex w-full rounded-xl bg-slate-100/50 p-1.5 gap-1">
                   <button
                     type="button"
                     onClick={() => field.onChange("draft")}
                     className={cn(
-                      "w-1/2 rounded-sm px-3 py-2 text-xs font-semibold transition-all",
+                      "flex-1 rounded-lg py-2 text-xs font-bold transition-all",
                       field.value === "draft"
-                        ? "bg-white text-indigo-600 shadow-sm"
+                        ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/50"
                         : "text-slate-500 hover:text-slate-700"
                     )}
                   >
@@ -186,9 +190,9 @@ export function CourseFormDialog({ open, onOpenChange }: Props) {
                     type="button"
                     onClick={() => field.onChange("published")}
                     className={cn(
-                      "w-1/2 rounded-sm px-3 py-2 text-xs font-semibold transition-all",
+                      "flex-1 rounded-lg py-2 text-xs font-bold transition-all",
                       field.value === "published"
-                        ? "bg-white text-indigo-600 shadow-sm"
+                        ? "bg-white text-indigo-600 shadow-sm ring-1 ring-slate-200/50"
                         : "text-slate-500 hover:text-slate-700"
                     )}
                   >
@@ -197,26 +201,25 @@ export function CourseFormDialog({ open, onOpenChange }: Props) {
                 </div>
               )}
             />
-            {errors.status && <p className="text-[10px] text-red-500">{errors.status.message}</p>}
           </div>
 
-          <DialogFooter className="gap-2 pt-4">
+          <DialogFooter className="mt-8 gap-3 sm:gap-0">
             <Button
               type="button"
               variant="ghost"
               onClick={() => onOpenChange(false)}
-              className="text-slate-500"
+              className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 font-semibold"
               disabled={isPending}
             >
-              Cancelar
+              Descartar
             </Button>
 
             <Button
               type="submit"
               disabled={isPending}
-              className="bg-indigo-600 min-w-30 text-white hover:bg-indigo-700"
+              className="bg-indigo-600 min-w-35 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200 rounded-xl font-bold transition-all active:scale-95"
             >
-              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Criar Curso"}
+              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Criar agora"}
             </Button>
           </DialogFooter>
         </form>
