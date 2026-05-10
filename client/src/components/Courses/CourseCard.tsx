@@ -3,17 +3,21 @@ import { ArrowRight, User } from "lucide-react";
 import type { Course } from "@/types/Course";
 import { Button } from "@/components/ui/button";
 import { truncate } from "@/lib/truncate";
+import { getCourseGradient } from "@/lib/getCourseGradient";
 
 interface CourseCardProps {
   course: Course;
 }
 
 export function CourseCard({ course }: CourseCardProps) {
+
+  const gradientClass = getCourseGradient(course.name);
+
   return (
     <div className="group flex flex-col overflow-hidden rounded-xl border border-slate-200 bg-white shadow-sm transition-all hover:-translate-y-1 hover:border-indigo-200 hover:shadow-md">
       
       {/* Thumbnail Placeholder */}
-      <div className="relative aspect-video overflow-hidden bg-linear-to-br from-indigo-500 to-violet-900">
+      <div className={`relative aspect-video overflow-hidden ${gradientClass}`}>
         <div className="absolute inset-0 bg-black/10 mix-blend-overlay" />
         <div className="absolute inset-0 flex items-center justify-center transition-all duration-500 group-hover:scale-110">
            <span className="text-2xl font-extrabold text-white uppercase tracking-tighter drop-shadow-md">
