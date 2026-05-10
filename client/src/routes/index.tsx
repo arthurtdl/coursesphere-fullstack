@@ -1,22 +1,25 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { Login } from '../components/Auth/Login';
-import { ProtectedRoute } from '../components/Auth/ProtectedRoute';
+import { Login, ProtectedRoute, DashboardLayout, ExplorePage, MyCoursesPage } from '@/components';
 
 export const router = createBrowserRouter([
   {
     path: '/',
-    element: <Navigate to="/dashboard" replace />,
+    element: <Navigate to="/dashboard/explore" replace />,
   },
   {
     path: '/login',
     element: <Login />,
   },
   {
-    element: <ProtectedRoute />,
+    element: <ProtectedRoute />, 
     children: [
       {
-        path: '/dashboard',
-        element: <div className="p-8"><h1>Dashboard (Privado)</h1><p>Bem-vindo ao CourseSphere!</p></div>,
+        path: '/dashboard', // Root path for authenticated users
+        element: <DashboardLayout />, 
+        children: [
+          { path: 'explore', element: <ExplorePage /> },
+          { path: 'my-courses', element: <MyCoursesPage /> },
+        ]
       },
     ],
   },
