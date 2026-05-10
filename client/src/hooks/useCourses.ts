@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { courseService } from "@/services/courseService";
-import type { CourseFormValues } from "@/types/Course";
+import type { CourseFormValues, CreateCourse } from "@/types/Course";
 import { toast } from "sonner";
 
 export function useExploreCourses() {
@@ -37,5 +37,40 @@ export function useCreateCourse() {
     onError: () => {
       toast.error("Erro ao criar curso. Tente novamente.");
     },
+  });
+}
+
+export function useUpdateCourse() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: async ({ id, data }: { id: string; data: CourseFormValues }) => {
+      const payload: CreateCourse = {
+        name: data.name,
+        description: data.description,
+        status: data.status,
+        start_date: data.startDate.toISOString(),
+        end_date: data.endDate.toISOString(),
+      };
+      return courseService.updateCourse(id, payload);
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses"] });
+      toast.success("Curso atualizado com sucesso!");
+    },
+    onError: () => toast.error("Erro ao atualizar curso."),
+  });
+}
+
+export function useDeleteCourse() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: courseService.deleteCourse,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["courses", "mine"] });
+      toast.success("Curso removido com sucesso!");
+    },
+    onError: () => toast.error("Erro ao excluir o curso."),
   });
 }

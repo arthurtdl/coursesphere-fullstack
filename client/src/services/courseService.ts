@@ -18,5 +18,17 @@ export const courseService = {
   createCourse: async (data: CreateCourse) => {
     const response = await api.post("/courses", { course: data })
     return response.data;
-  }
+  },
+
+  // PATCH /api/v1/courses/id
+  updateCourse: async (id: string, data: CreateCourse) => {
+    const response = await api.patch(`/courses/${id}`, { course: data });
+    return response.data;
+  },
+
+  // DELETE /api/v1/courses/id
+  deleteCourse: async (id: string) => {
+    const response = await api.delete(`/courses/${id}`);
+    return response.data;
+  },
 };
