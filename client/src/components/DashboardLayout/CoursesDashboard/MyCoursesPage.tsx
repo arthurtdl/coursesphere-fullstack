@@ -38,9 +38,9 @@ export function MyCoursesPage() {
             
             <Button 
               onClick={() => setIsDialogOpen(true)} 
-              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm cursor-pointer"
             >
-              <Plus className="mr-2 h-4 w-4" /> Novo Curso
+              <Plus className="mr-1 h-4 w-4" /> Novo Curso
             </Button>
           </div>
 
@@ -60,7 +60,7 @@ export function MyCoursesPage() {
                 <button
                   key={status}
                   onClick={() => setStatusFilter(status)}
-                  className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
+                  className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all cursor-pointer ${
                     statusFilter === status ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
                   }`}
                 >
@@ -83,7 +83,7 @@ export function MyCoursesPage() {
           <>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredCourses.map((course) => (
-                <CourseCard key={course.id} course={course} />
+                <CourseCard key={course.id} course={course} isMyCourses={true} />
               ))}
             </div>
 

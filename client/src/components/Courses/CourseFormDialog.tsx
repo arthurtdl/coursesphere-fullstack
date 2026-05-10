@@ -205,16 +205,6 @@ export function CourseFormDialog({ open, onOpenChange }: Props) {
 
           <DialogFooter className="mt-8 gap-3 sm:gap-0">
             <Button
-              type="button"
-              variant="ghost"
-              onClick={() => onOpenChange(false)}
-              className="text-slate-400 hover:text-slate-600 hover:bg-slate-50 font-semibold"
-              disabled={isPending}
-            >
-              Descartar
-            </Button>
-
-            <Button
               type="submit"
               disabled={isPending}
               className="bg-indigo-600 min-w-35 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200 rounded-xl font-bold transition-all active:scale-95"
