@@ -6,13 +6,15 @@ import { useMyCourses } from "@/hooks/useCourses";
 import { CourseCard } from "@/components/Courses/CourseCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { CourseFormDialog } from "@/components/Courses/CourseFormDialog";
 
 type CourseStatus = "all" | "published" | "draft";
 
 export function MyCoursesPage() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<CourseStatus>("all");
-  
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
+
   const { data: courses, isLoading } = useMyCourses();
 
   const filteredCourses = useMemo(() => {
@@ -26,20 +28,18 @@ export function MyCoursesPage() {
 
   return (
     <div className="pb-10">
-      {/* Header with filters */}
       <header className="bg-white border-b border-slate-200 mb-8">
         <div className="mx-auto max-w-7xl px-6 py-10 lg:px-8">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600">
-                Painel do Criador
-              </p>
-              <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900">
-                Meus Cursos
-              </h1>
+              <p className="text-xs font-bold uppercase tracking-[0.2em] text-indigo-600">Painel do Criador</p>
+              <h1 className="mt-2 text-3xl font-bold tracking-tight text-slate-900">Meus Cursos</h1>
             </div>
             
-            <Button className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm">
+            <Button 
+              onClick={() => setIsDialogOpen(true)} 
+              className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm"
+            >
               <Plus className="mr-2 h-4 w-4" /> Novo Curso
             </Button>
           </div>
@@ -61,9 +61,7 @@ export function MyCoursesPage() {
                   key={status}
                   onClick={() => setStatusFilter(status)}
                   className={`px-4 py-1.5 text-xs font-semibold rounded-md transition-all ${
-                    statusFilter === status
-                      ? "bg-white text-indigo-600 shadow-sm"
-                      : "text-slate-500 hover:text-slate-700"
+                    statusFilter === status ? "bg-white text-indigo-600 shadow-sm" : "text-slate-500 hover:text-slate-700"
                   }`}
                 >
                   {status === "all" ? "Todos" : status === "published" ? "Publicados" : "Rascunhos"}
@@ -91,14 +89,18 @@ export function MyCoursesPage() {
 
             {filteredCourses.length === 0 && (
               <div className="mt-12 py-16 text-center rounded-xl border border-dashed border-slate-300 bg-white">
-                <p className="text-slate-500 text-sm font-medium">
-                  Nenhum curso encontrado.
-                </p>
+                <p className="text-slate-500 text-sm font-medium">Nenhum curso encontrado.</p>
               </div>
             )}
           </>
         )}
       </main>
+
+      {/* Agora o Modal se vira sozinho com a mutação e o submit */}
+      <CourseFormDialog 
+        open={isDialogOpen} 
+        onOpenChange={setIsDialogOpen} 
+      />
     </div>
   );
 }

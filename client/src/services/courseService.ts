@@ -1,5 +1,5 @@
 import api from "./api";
-import type { Course } from "@/types/Course";
+import type { Course, CreateCourse } from "@/types/Course";
 
 export const courseService = {
   // GET /api/v1/courses (Other users' courses)
@@ -13,4 +13,10 @@ export const courseService = {
     const { data } = await api.get("/courses/mine");
     return data;
   },
+
+  // POST /api/v1/courses
+  createCourse: async (data: CreateCourse) => {
+    const response = await api.post("/courses", { course: data })
+    return response.data;
+  }
 };
