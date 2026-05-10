@@ -1,12 +1,18 @@
+"use client";
+
 import { useState, useMemo } from "react";
 import { Search, Compass } from "lucide-react";
 import { useExploreCourses } from "@/hooks/useCourses";
 import { CourseCard } from "@/components/Courses/CourseCard";
 import { Input } from "@/components/ui/input";
 import { truncate } from "@/lib/truncate";
+import { Pagination } from "@/components/Shared/Pagination";
 
 export function ExplorePage() {
   const [query, setQuery] = useState("");
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 9;
+
   const { data: courses, isLoading, error } = useExploreCourses();
 
   const filteredCourses = useMemo(() => {
@@ -15,6 +21,16 @@ export function ExplorePage() {
       c.name.toLowerCase().includes(query.toLowerCase()),
     );
   }, [query, courses]);
+
+  const paginatedCourses = useMemo(() => {
+    const start = (currentPage - 1) * itemsPerPage;
+    return filteredCourses.slice(start, start + itemsPerPage);
+  }, [filteredCourses, currentPage]);
+
+  const handleSearch = (val: string) => {
+    setQuery(val);
+    setCurrentPage(1);
+  };
 
   if (error)
     return (
@@ -47,7 +63,7 @@ export function ExplorePage() {
             <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-slate-100" />
             <Input
               value={query}
-              onChange={(e) => setQuery(e.target.value)}
+              onChange={(e) => handleSearch(e.target.value)}
               placeholder="Buscar cursos por nome..."
               className="h-14 w-full border-0 bg-white pl-12 text-base text-slate-100 shadow-md ring-offset-0 placeholder:text-slate-300 focus-visible:ring-2 focus-visible:ring-indigo-300 focus-visible:ring-offset-0"
             />
@@ -69,17 +85,23 @@ export function ExplorePage() {
         ) : (
           <>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-              {filteredCourses.map((course) => (
+              {paginatedCourses.map((course) => (
                 <CourseCard key={course.id} course={course} />
               ))}
             </div>
 
-            {filteredCourses.length === 0 && (
+            {filteredCourses.length === 0 ? (
               <div className="mt-12 rounded-xl border border-dashed border-slate-300 bg-white px-6 py-16 text-center shadow-sm">
-                <p className="text-slate-500">
+                <p className="text-slate-500 font-medium">
                   {query ? `Nenhum resultado para "${truncate(query, 60)}"` : "Nenhum curso disponível"}
                 </p>
               </div>
+            ) : (
+              <Pagination 
+                total={filteredCourses.length} 
+                perPage={itemsPerPage} 
+                onPageChange={setCurrentPage} 
+              />
             )}
           </>
         )}
