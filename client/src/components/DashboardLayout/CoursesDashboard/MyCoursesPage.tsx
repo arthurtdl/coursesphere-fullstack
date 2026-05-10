@@ -96,10 +96,9 @@ export function MyCoursesPage() {
         )}
       </main>
 
-      {/* Agora o Modal se vira sozinho com a mutação e o submit */}
       <CourseFormDialog 
         open={isDialogOpen} 
-        onOpenChange={setIsDialogOpen} 
+        onOpenChange={setIsDialogOpen}
       />
     </div>
   );

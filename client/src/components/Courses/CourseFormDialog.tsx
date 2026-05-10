@@ -1,12 +1,14 @@
 "use client";
 
+import type { Course } from "@/types/Course";
+import { useEffect } from "react";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
-import { useCreateCourse } from "@/hooks/useCourses";
+import { useCreateCourse, useUpdateCourse } from "@/hooks/useCourses";
 
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
@@ -21,32 +23,83 @@ const courseSchema = z.object({
   description: z.string().min(10, "No mínimo 10 caracteres"),
   startDate: z.date({ error: "Início obrigatório" }),
   endDate: z.date({ error: "Término obrigatório" }),
-  status: z.enum(["draft", "published"], { error: "Selecione um status" }),
+  status: z.enum(["draft", "published"], {
+  message: "Selecione um status",
+}),
 });
 
-type CourseFormValues = z.infer<typeof courseSchema>;
+export type CourseFormValues = z.infer<typeof courseSchema>;
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  courseToEdit?: Course | null;
 }
 
-export function CourseFormDialog({ open, onOpenChange }: Props) {
-  const { mutate: createCourse, isPending } = useCreateCourse();
+export function CourseFormDialog({ open, onOpenChange, courseToEdit }: Props) {
+  const isEditing = !!courseToEdit;
+
+  const { mutate: createCourse, isPending: isCreating } = useCreateCourse();
+  const { mutate: updateCourse, isPending: isUpdating } = useUpdateCourse();
 
   const { register, handleSubmit, control, reset, formState: { errors } } = useForm<CourseFormValues>({
     resolver: zodResolver(courseSchema),
-    defaultValues: { status: "draft" }
+    defaultValues: { 
+      name: "",
+      description: "",
+      status: "draft"
+    }
   });
 
-  const onSave = (data: CourseFormValues) => {
-    createCourse(data, {
-      onSuccess: () => {
-        reset();
-        onOpenChange(false)
+  useEffect(() => {
+    if (open) {
+      if (courseToEdit) {
+        reset({
+          name: courseToEdit.name,
+          description: courseToEdit.description,
+          status: courseToEdit.status,
+          startDate: new Date(courseToEdit.start_date),
+          endDate: new Date(courseToEdit.end_date),
+        });
+      } else {
+        reset({
+          name: "",
+          description: "",
+          status: "draft",
+          startDate: undefined,
+          endDate: undefined,
+        });
       }
-    })
-  }
+    }
+  }, [courseToEdit, open, reset]);
+
+  const onSave = (data: CourseFormValues) => {
+    if (isEditing && courseToEdit) {
+      updateCourse(
+        { id: courseToEdit.id.toString(), data },
+        {
+          onSuccess: () => {
+            reset();
+            onOpenChange(false);
+          }
+        }
+      );
+    } else {
+      createCourse(
+        data,
+        {
+          onSuccess: () => {
+            reset();
+            onOpenChange(false);
+          }
+        }
+      );
+    }
+  };
+
+  const isPending = isCreating || isUpdating;
+
+  // return ( ... )
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
