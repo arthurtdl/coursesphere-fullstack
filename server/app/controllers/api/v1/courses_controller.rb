@@ -10,15 +10,13 @@ module Api
       # GET /api/v1/courses
       def index
         @courses = Course.explore_for(current_user.id)
-
-        render json: @courses
+        render json: CourseRepresenter.new(@courses).as_json
       end
 
       # GET /api/v1/courses/mine
       def mine
         @courses = current_user.courses
-
-        render json: @courses
+        render json: CourseRepresenter.new(@courses).as_json
       end
 
       # GET /api/v1/courses/:id
@@ -59,7 +57,7 @@ module Api
       end
 
       def authorize_author
-        return if @course.author == current_user
+        return if @course.author_id == current_user.id
 
         render json: { error: 'Forbidden: You are not the author of this course' }, status: :forbidden
       end

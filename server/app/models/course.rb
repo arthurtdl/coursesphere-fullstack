@@ -3,6 +3,8 @@
 class Course < ApplicationRecord
   belongs_to :author, class_name: 'User'
 
+  validates :author, presence: true
+
   has_many :lessons, dependent: :destroy
 
   enum status: { draft: 0, published: 1 }
@@ -11,7 +13,7 @@ class Course < ApplicationRecord
 
   scope :is_published, -> { where(status: :published) }
 
-  scope :explore_for ->(user_id) {
+  scope :explore_for, ->(user_id) {
     is_published.where.not(author_id: user_id)
   }
 

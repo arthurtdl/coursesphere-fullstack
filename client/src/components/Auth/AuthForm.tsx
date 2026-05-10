@@ -119,11 +119,7 @@ export function AuthForm() {
                   <Label htmlFor="password" className="text-gray-700">
                     Senha
                   </Label>
-                  <button
-                    type="button"
-                    className="text-xs text-primary hover:underline cursor-pointer">
-                    Esqueceu a senha?
-                  </button>
+                  
                 </div>
                 <Input
                   id="password"
