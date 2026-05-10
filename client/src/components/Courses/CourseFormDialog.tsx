@@ -6,10 +6,8 @@ import * as z from "zod";
 import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 import { Calendar as CalendarIcon, Loader2 } from "lucide-react";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useCreateCourse } from "@/hooks/useCourses";
 
-import { courseService } from "@/services/courseService";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -34,43 +32,21 @@ interface Props {
 }
 
 export function CourseFormDialog({ open, onOpenChange }: Props) {
-  const queryClient = useQueryClient();
+  const { mutate: createCourse, isPending } = useCreateCourse();
 
-  const {
-    register,
-    handleSubmit,
-    control,
-    reset,
-    formState: { errors },
-  } = useForm<CourseFormValues>({
+  const { register, handleSubmit, control, reset, formState: { errors } } = useForm<CourseFormValues>({
     resolver: zodResolver(courseSchema),
-    defaultValues: {
-      status: "draft",
-    }
-  });
-
-  const { mutate: createCourse, isPending } = useMutation({
-    mutationFn: courseService.createCourse,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["courses", "mine"] });
-      toast.success("Curso criado com sucesso!");
-      reset();
-      onOpenChange(false);
-    },
-    onError: () => {
-      toast.error("Erro ao criar curso. Tente novamente.");
-    },
+    defaultValues: { status: "draft" }
   });
 
   const onSave = (data: CourseFormValues) => {
-    createCourse({
-      name: data.name,
-      description: data.description,
-      status: data.status,
-      start_date: data.startDate.toISOString(), 
-      end_date: data.endDate.toISOString(),
-    });
-  };
+    createCourse(data, {
+      onSuccess: () => {
+        reset();
+        onOpenChange(false)
+      }
+    })
+  }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
