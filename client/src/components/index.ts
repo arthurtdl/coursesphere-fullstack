@@ -14,7 +14,7 @@ export { MyCoursesPage } from "./DashboardLayout/CoursesDashboard/MyCoursesPage"
 export { ExplorePage } from "./DashboardLayout/CoursesDashboard/ExplorePage"
 
 // NavBar
-export { NavBar } from "./NavBar/NavBar_tem"
+export { NavBar } from "./NavBar/NavBar"
 
 // Auth
 export { AuthForm } from "./Auth/AuthForm"

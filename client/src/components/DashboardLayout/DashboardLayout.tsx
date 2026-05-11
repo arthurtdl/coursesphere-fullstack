@@ -1,4 +1,4 @@
-import { NavBar } from "../NavBar/NavBar_tem"
+import { NavBar } from "../NavBar/NavBar"
 import { Outlet } from "react-router-dom"
 import { Footer } from "../Shared/Footer"
 
