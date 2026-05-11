@@ -33,11 +33,18 @@ COPY --chown=rails:rails . .
 
 # Configura o entrypoint
 USER root
-COPY --chown=rails:rails entrypoint.sh /usr/bin/
+
+# Copia para o local correto e dá permissão
+COPY entrypoint.sh /usr/bin/entrypoint.sh
 RUN chmod +x /usr/bin/entrypoint.sh
+
+# Volta para o usuário rails
 USER rails
 
-ENTRYPOINT ["entrypoint.sh"]
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
 
+# Porta dinâmica da Render
 EXPOSE 3000
+
+# Comando padrão
 CMD ["rails", "server", "-b", "0.0.0.0"]
