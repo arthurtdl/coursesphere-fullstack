@@ -7,27 +7,44 @@ RUN apt-get update -qq && apt-get install -y \
     libpq-dev \
     nodejs \
     curl \
-    git
+    git \
+    && rm -rf /var/lib/apt/lists/*
 
-# Criação de usuário não-root (segurança) e configuração do diretório de trabalho
+# Criação de usuário não-root
 RUN useradd -m rails
+
+# Configuração do diretório de trabalho
 WORKDIR /home/rails/app
 
-# Copia os arquivos de definição criados manualmente
+# Define o usuário rails como dono da pasta de trabalho antes de mudar o usuário
+RUN chown rails:rails /home/rails/app
+
+# Muda para o usuário rails antes de instalar dependências
+USER rails
+
+# Copia os arquivos de definição de gems
 COPY --chown=rails:rails Gemfile Gemfile.lock ./
 
 # Instala as gems
 RUN bundle install
 
-# Copia o restante do código da aplicação para o contêiner
+# Copia o restante do código
 COPY --chown=rails:rails . .
 
 # Configura o entrypoint
-COPY --chown=rails:rails entrypoint.sh /usr/bin/
-RUN chmod +x /usr/bin/entrypoint.sh
-ENTRYPOINT ["entrypoint.sh"]
+USER root
 
-# Muda para o usuário não-root
+# Copia para o local correto e dá permissão
+COPY entrypoint.sh /usr/bin/entrypoint.sh
+RUN chmod +x /usr/bin/entrypoint.sh
+
+# Volta para o usuário rails
 USER rails
+
+ENTRYPOINT ["/usr/bin/entrypoint.sh"]
+
+# Porta dinâmica da Render
 EXPOSE 3000
+
+# Comando padrão
 CMD ["rails", "server", "-b", "0.0.0.0"]
