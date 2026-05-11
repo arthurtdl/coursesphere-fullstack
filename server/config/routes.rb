@@ -11,4 +11,7 @@ Rails.application.routes.draw do
       resources :lessons
     end
   end
+
+  # Root route
+  root to: proc { [200, { 'Content-Type' => 'text/plain' }, ['CourseSphere API is running!']] }
 end
