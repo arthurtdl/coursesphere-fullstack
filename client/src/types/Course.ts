@@ -15,3 +15,19 @@ export interface Course {
   end_date: string;
   author: Author;
 }
+
+export interface CreateCourse {
+  name: string;
+  description: string;
+  status: CourseStatus;
+  start_date: string;
+  end_date: string;
+}
+
+export interface CourseFormValues {
+  name: string;
+  description: string;
+  status: "draft" | "published";
+  startDate: Date;
+  endDate: Date;
+};

@@ -5,7 +5,7 @@ Esta documentação descreve como a navegação está estruturada no CourseSpher
 ## Estratégia de Roteamento
 O sistema utiliza o `createBrowserRouter` para definir rotas declarativas. A navegação é dividida em duas categorias principais: **Rotas Públicas** e **Rotas Protegidas**.
 
-### 🏗️ Estrutura das Rotas
+### Estrutura das Rotas
 1. **Raiz (`/`)**: Redireciona automaticamente para o `/dashboard`.
 2. **Login (`/login`)**: Página de entrada contendo o formulário de autenticação (Login e Registro).
 3. **Dashboard (`/dashboard`)**: Área principal do sistema, acessível apenas por usuários autenticados.

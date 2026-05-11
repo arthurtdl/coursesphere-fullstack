@@ -1,5 +1,9 @@
+// Shared
+export { CustomAlertDialog } from "./Shared/AlertDialog"
+
 // DashboardLayout
 export { DashboardLayout } from "./DashboardLayout/DashboardLayout"
+
 // DashboardLayout/CoursesDashboard
 export { MyCoursesPage } from "./DashboardLayout/CoursesDashboard/MyCoursesPage"
 export { ExplorePage } from "./DashboardLayout/CoursesDashboard/ExplorePage"
