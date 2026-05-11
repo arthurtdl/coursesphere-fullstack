@@ -1,3 +1,5 @@
+// Read more at "../../docs/EXTERNAL_API.md"
+
 import axios from "axios";
 
 export const fetchRandomInstructor = async (courseId: string | number) => {
