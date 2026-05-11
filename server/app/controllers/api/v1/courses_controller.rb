@@ -21,7 +21,8 @@ module Api
 
       # GET /api/v1/courses/:id
       def show
-        render json: CourseRepresenter.new(@course).as_json
+        @course = Course.includes(:lessons, :author).find(params[:id])
+        render json: CourseRepresenter.new(@course, include_lessons: true).as_json # Active lessons flag
       end
 
       # POST /api/v1/courses

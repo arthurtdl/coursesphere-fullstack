@@ -133,7 +133,7 @@ export function CourseCard({ course, isMyCourses, onEdit }: CourseCardProps) {
             className="bg-indigo-600 text-white hover:bg-indigo-700 shadow-sm rounded-lg h-9 px-4 transition-all active:scale-95" 
             asChild
           >
-            <Link to={`/courses/${course.id}`}>
+            <Link to={`/dashboard/${isMyCourses ? "my-courses" : "explore"}/${course.id}`}>
               {isMyCourses ? "Gerenciar" : "Acessar"} 
               <ArrowRight className="ml-2 h-3.5 w-3.5" />
             </Link>

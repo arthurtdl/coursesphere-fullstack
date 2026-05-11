@@ -113,7 +113,7 @@ export function ExplorePage() {
           <>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {paginatedCourses.map((course) => (
-                <CourseCard key={course.id} course={course} isMyCourses={false} />
+                <CourseCard key={course.id} course={course} isMyCourses={false} onEdit={() => {}} />
               ))}
             </div>
 

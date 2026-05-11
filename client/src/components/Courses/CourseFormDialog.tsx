@@ -99,8 +99,6 @@ export function CourseFormDialog({ open, onOpenChange, courseToEdit }: Props) {
 
   const isPending = isCreating || isUpdating;
 
-  // return ( ... )
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-115 bg-white p-8 border-none shadow-2xl rounded-2xl">
@@ -239,7 +237,7 @@ export function CourseFormDialog({ open, onOpenChange, courseToEdit }: Props) {
               className="bg-indigo-600 min-w-35 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200 rounded-xl font-bold transition-all active:scale-95"
             >
               {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> :
-               isEditing ? "Editar" : "Criar agora"}
+               isEditing ? "Salvar Alterações" : "Criar Curso"}
             </Button>
           </DialogFooter>
         </form>

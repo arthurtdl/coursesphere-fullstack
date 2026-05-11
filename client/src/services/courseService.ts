@@ -2,6 +2,13 @@ import api from "./api";
 import type { Course, CreateCourse } from "@/types/Course";
 
 export const courseService = {
+
+  // GET /api/v1/courses/id
+  getCourseDetails: async (id: number | string): Promise<Course> => {
+  const response = await api.get(`/courses/${id}`);
+  return response.data;
+},
+
   // GET /api/v1/courses (Other users' courses)
   getExploreCourses: async (): Promise<Course[]> => {
     const { data } = await api.get("/courses");

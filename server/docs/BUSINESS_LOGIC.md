@@ -12,7 +12,7 @@ O sistema é estruturado em três entidades principais:
 - Cursos (`Courses`)
 - Aulas (`Lessons`)
 
-![Relational Database](../../assets/relational_database.png)
+![Relational Database](../../assets/relational.png)
 
 ---
 

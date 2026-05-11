@@ -1,3 +1,5 @@
+import type { Lesson } from "./Lesson";
+
 export type CourseStatus = 'draft' | 'published';
 
 export interface Author {
@@ -14,6 +16,7 @@ export interface Course {
   start_date: string;
   end_date: string;
   author: Author;
+  lessons?: Lesson[];
 }
 
 export interface CreateCourse {

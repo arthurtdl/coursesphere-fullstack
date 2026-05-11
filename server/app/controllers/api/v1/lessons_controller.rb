@@ -50,16 +50,19 @@ module Api
       end
 
       def authorize_course_author
-        course_id = params[:lesson] ? params[:lesson][:course_id] : @lesson.course_id
-        course = Course.find_by(id: course_id)
+        id_para_checar = params.dig(:lesson, :course_id) || @lesson&.course_id
+        course = Course.find_by(id: id_para_checar)
 
-        return if course&.author == current_user
-
-        render json: { error: 'Forbidden: Only the course author can manage lessons' }, status: :forbidden
+        if course&.author == current_user
+          return 
+        
+        else
+          render json: { error: 'Forbidden' }, status: :forbidden
+        end
       end
 
       def lesson_params
-        params.require(:lesson).permit(:name, :description, :video_url, :status, :course_id)
+        params.require(:lesson).permit(:name, :description, :video_url, :status, :course_id, :position)
       end
     end
   end

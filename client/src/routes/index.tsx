@@ -1,30 +1,46 @@
-import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { Login, ProtectedRoute, DashboardLayout, ExplorePage, MyCoursesPage } from '@/components';
+import { createBrowserRouter, Navigate } from "react-router-dom";
+import {
+  Login,
+  ProtectedRoute,
+  DashboardLayout,
+  ExplorePage,
+  MyCoursesPage,
+  NotFoundPage,
+  LessonsPage,
+} from "@/components";
 
 export const router = createBrowserRouter([
   {
-    path: '/',
+    path: "/",
     element: <Navigate to="/dashboard/explore" replace />,
   },
   {
-    path: '/login',
+    path: "/login",
     element: <Login />,
   },
   {
-    element: <ProtectedRoute />, 
+    element: <ProtectedRoute />,
     children: [
       {
-        path: '/dashboard', // Root path for authenticated users
-        element: <DashboardLayout />, 
+        path: "/dashboard",
+        element: <DashboardLayout />,
         children: [
-          { path: 'explore', element: <ExplorePage /> },
-          { path: 'my-courses', element: <MyCoursesPage /> },
-        ]
+          { index: true, element: <Navigate to="explore" replace /> },
+          { path: "explore", element: <ExplorePage /> },
+
+          // Guest route
+          { path: "explore/:id", element: <LessonsPage /> },
+
+          { path: "my-courses", element: <MyCoursesPage /> },
+          
+          // Owner route
+          { path: "my-courses/:id", element: <LessonsPage /> },
+        ],
       },
     ],
   },
   {
-    path: '*',
-    element: <div className="p-8 text-center">404 - Página não encontrada</div>,
+    path: "*",
+    element: <NotFoundPage />,
   },
 ]);
