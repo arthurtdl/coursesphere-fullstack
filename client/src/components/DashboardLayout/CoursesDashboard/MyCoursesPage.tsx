@@ -97,7 +97,7 @@ export function MyCoursesPage() {
             </div>
 
             {filteredCourses.length === 0 && (
-              <div className="mt-12 py-16 text-center rounded-xl border border-dashed border-slate-300 bg-white">
+              <div className="mt-20 mb-15 py-16 text-center rounded-xl border border-dashed border-slate-300 bg-white">
                 <p className="text-slate-500 text-sm font-medium">Nenhum curso encontrado.</p>
               </div>
             )}
