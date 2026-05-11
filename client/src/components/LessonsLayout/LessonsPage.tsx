@@ -11,6 +11,7 @@ import { useCourse } from "@/hooks/useCourses";
 import { LessonAccordion } from "./LessonsAccordion";
 import { LessonFormDialog } from "../Lessons/LessonFormDialog";
 import type { Lesson } from "@/types/Lesson";
+import { GuestInstructor } from "../Lessons/GuestInstructor";
 
 export function LessonsPage() {
   const [isLessonFormOpen, setIsLessonFormOpen] = useState(false);
@@ -163,20 +164,9 @@ export function LessonsPage() {
 
           <aside className="space-y-8">
             {/* GuestInstructor */}
-            <section className="rounded-3xl border border-slate-200 bg-white p-8 shadow-sm text-center">
-              <p className="mb-8 text-[10px] font-black uppercase tracking-[0.3em] text-slate-300">
-                Instrutor Convidado
-              </p>
-
-              <div className="flex flex-col items-center gap-4">
-                <div className="h-28 w-28 rounded-full bg-slate-100 animate-pulse ring-4 ring-slate-50 shadow-inner" />
-                <div className="space-y-2">
-                  <div className="h-5 w-32 mx-auto rounded bg-slate-100 animate-pulse" />
-                  <div className="h-4 w-48 mx-auto rounded bg-slate-100 animate-pulse" />
-                </div>
-              </div>
-            </section>
+            <GuestInstructor courseId={course.id}/>
           </aside>
+
         </div>
       </main>
     </div>
