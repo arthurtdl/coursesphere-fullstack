@@ -38,7 +38,7 @@ export function LessonsPage() {
           <p className="text-slate-500">O conteúdo que você busca pode ter sido removido.</p>
         </div>
         <Button onClick={() => navigate(backPath)} variant="outline" className="rounded-xl px-8">
-          Voltar para segurança
+          Voltar
         </Button>
       </div>
     );

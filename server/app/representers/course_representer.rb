@@ -37,8 +37,8 @@ class CourseRepresenter
       data[:lessons] = course.lessons.order(:position).map do |lesson|
         {
           id: lesson.id,
-          title: lesson.title,
-          content: lesson.content,
+          name: lesson.name, 
+          description: lesson.description, 
           video_url: lesson.video_url,
           status: lesson.status,
           position: lesson.position
