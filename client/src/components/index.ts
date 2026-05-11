@@ -4,6 +4,7 @@ export { NotFoundPage } from "./Shared/NotFoundPage"
 
 // LessonsLayout
 export { LessonsPage } from "./LessonsLayout/LessonsPage"
+export { StatusBadge } from "./LessonsLayout/StatusBadge"
 
 // DashboardLayout
 export { DashboardLayout } from "./DashboardLayout/DashboardLayout"

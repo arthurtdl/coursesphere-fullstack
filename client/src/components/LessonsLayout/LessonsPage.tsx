@@ -7,6 +7,7 @@ import { format } from "date-fns";
 import { ptBR } from "date-fns/locale";
 
 import { useCourse } from "@/hooks/useCourses";
+import { LessonAccordion } from "./LessonsAccordion";
 
 export function LessonsPage() {
   const { id } = useParams();
@@ -105,21 +106,11 @@ export function LessonsPage() {
               </div>
 
               {/* LessonAccordion */}
-              <div className="space-y-4">
-                {course.lessons && course.lessons.length > 0 ? (
-                  course.lessons.map((lesson) => (
-                    <div key={lesson.id} className="p-5 bg-white rounded-2xl border border-slate-100 shadow-sm">
-                      <span className="text-sm font-bold text-slate-800">{lesson.name}</span>
-                    </div>
-                  ))
-                ) : (
-                  <div className="rounded-3xl border-2 border-dashed border-slate-200 bg-white/50 p-16 text-center">
-                    <p className="text-slate-400 font-medium italic">
-                      Nenhuma lição cadastrada neste curso ainda.
-                    </p>
-                  </div>
-                )}
-              </div>
+              <LessonAccordion
+                lessons={course.lessons || []}
+                isOwner={isOwner}
+                courseId={course.id}
+              />
             </section>
           </div>
 
