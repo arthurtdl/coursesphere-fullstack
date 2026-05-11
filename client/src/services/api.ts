@@ -1,12 +1,8 @@
 import axios from 'axios';
 import type { InternalAxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
-const isDev = import.meta.env.DEV;
-
 const api = axios.create({
-  baseURL: isDev 
-    ? 'http://localhost:3000/api/v1' 
-    : 'https://futura-api-de-producao.com/api/v1',
+  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000/api/v1',
   withCredentials: true,
 });
 
