@@ -238,7 +238,8 @@ export function CourseFormDialog({ open, onOpenChange, courseToEdit }: Props) {
               disabled={isPending}
               className="bg-indigo-600 min-w-35 text-white hover:bg-indigo-700 shadow-lg shadow-indigo-200 rounded-xl font-bold transition-all active:scale-95"
             >
-              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> : "Criar agora"}
+              {isPending ? <Loader2 className="h-4 w-4 animate-spin" /> :
+               isEditing ? "Editar" : "Criar agora"}
             </Button>
           </DialogFooter>
         </form>

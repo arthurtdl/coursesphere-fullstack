@@ -7,6 +7,7 @@ import { CourseCard } from "@/components/Courses/CourseCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CourseFormDialog } from "@/components/Courses/CourseFormDialog";
+import type { Course } from "@/types/Course";
 
 type CourseStatus = "all" | "published" | "draft";
 
@@ -14,6 +15,7 @@ export function MyCoursesPage() {
   const [query, setQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState<CourseStatus>("all");
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
 
   const { data: courses, isLoading } = useMyCourses();
 
@@ -37,7 +39,10 @@ export function MyCoursesPage() {
             </div>
             
             <Button 
-              onClick={() => setIsDialogOpen(true)} 
+              onClick={() => {
+                setSelectedCourse(null);
+                setIsDialogOpen(true);
+              }} 
               className="bg-indigo-600 hover:bg-indigo-700 text-white shadow-sm cursor-pointer"
             >
               <Plus className="mr-1 h-4 w-4" /> Novo Curso
@@ -83,7 +88,11 @@ export function MyCoursesPage() {
           <>
             <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
               {filteredCourses.map((course) => (
-                <CourseCard key={course.id} course={course} isMyCourses={true} />
+                <CourseCard key={course.id} course={course} isMyCourses={true}
+                onEdit={(c) => {
+                  setSelectedCourse(c);
+                  setIsDialogOpen(true);
+                }}/>
               ))}
             </div>
 
@@ -99,6 +108,7 @@ export function MyCoursesPage() {
       <CourseFormDialog 
         open={isDialogOpen} 
         onOpenChange={setIsDialogOpen}
+        courseToEdit={selectedCourse}
       />
     </div>
   );
