@@ -3,6 +3,17 @@ import { courseService } from "@/services/courseService";
 import type { CourseFormValues, CreateCourse } from "@/types/Course";
 import { toast } from "sonner";
 
+
+export function useCourse(id: number | string | undefined) {
+  return useQuery({
+    queryKey: ["courses", id?.toString()],
+    queryFn: () => courseService.getCourseDetails(id!),
+    enabled: !!id,
+    staleTime: 1000 * 60 * 5,
+  });
+}
+
+
 export function useExploreCourses() {
   return useQuery({
     queryKey: ["courses", "explore"],
