@@ -19,9 +19,10 @@ interface LessonAccordionProps {
   lessons: Lesson[];
   isOwner: boolean;
   courseId: string | number;
+  onEdit: (lesson: Lesson) => void;
 }
 
-export function LessonAccordion({ lessons, isOwner, courseId }: LessonAccordionProps) {
+export function LessonAccordion({ lessons, isOwner, courseId, onEdit }: LessonAccordionProps) {
   const [currentPage, setCurrentPage] = useState(1);
   const perPage = 5;
 
@@ -79,9 +80,7 @@ export function LessonAccordion({ lessons, isOwner, courseId }: LessonAccordionP
                         variant="ghost" 
                         size="icon" 
                         className="h-8 w-8 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded-lg cursor-pointer"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          // Lógica de Edit aqui
+                        onClick={() => {onEdit(lesson);
                         }}
                       >
                         <Pencil className="h-3.5 w-3.5" />

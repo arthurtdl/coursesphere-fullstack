@@ -18,3 +18,7 @@ export interface LessonFormValues {
   video_url?: string;
   status: LessonStatus;
 }
+
+export interface LessonPayload {
+  lesson: LessonFormValues & { course_id?: string | number };
+}

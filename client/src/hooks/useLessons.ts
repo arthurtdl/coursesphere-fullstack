@@ -1,36 +1,47 @@
+import api from "@/services/api";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { lessonService } from "@/services/lessonService";
-import type { LessonFormValues } from "@/types/Lesson";
+import type { LessonFormValues, LessonPayload } from "@/types/Lesson";
 import { toast } from "sonner";
 
 
-export function useCreateLesson(courseId: number | string) {
+export const useCreateLesson = (courseId: string | number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (data: LessonFormValues) => lessonService.createLesson(courseId, data),
+    mutationFn: (data: LessonFormValues & { course_id: string | number }) => {
+      const payload: LessonPayload = {
+        lesson: data
+      };
+      return api.post("/lessons", payload);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses", courseId.toString()] });
-      toast.success("Aula adicionada ao curso!");
+      toast.success("Aula criada com sucesso!");
     },
-    onError: () => toast.error("Erro ao criar a aula.")
+    onError: () => {
+      toast.error("Não foi possível criar a aula.");
+    }
   });
-}
+};
 
-
-export function useUpdateLesson(courseId: number | string) {
+export const useUpdateLesson = (courseId: string | number) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, data }: { id: number | string; data: LessonFormValues }) => 
-      lessonService.updateLesson(id, data),
+    mutationFn: ({ id, data }: { id: string; data: LessonFormValues }) => {
+      const payload = { lesson: data };
+      return api.patch(`/lessons/${id}`, payload);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses", courseId.toString()] });
-      toast.success("Aula atualizada!");
+      toast.success("Alterações salvas!");
     },
-    onError: () => toast.error("Não foi possível salvar as alterações.")
+    onError: () => {
+      toast.error("Não foi possível salvar as alterações.");
+    }
   });
-}
+};
 
 
 export function useDeleteLesson(courseId: number | string) {
