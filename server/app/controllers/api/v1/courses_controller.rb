@@ -27,17 +27,15 @@ module Api
 
       # POST /api/v1/courses
       def create
-        @user = User.new(user_params)
-        if @user.save
-          render json: UserRepresenter.new(@user).as_json, status: :created
+        @course = Course.new(course_params)
+        
+        @course.author_id = current_user.id
+
+        if @course.save
+          render json: CourseRepresenter.new(@course).as_json, status: :created
         else
-          render json: @user.errors, status: :unprocessable_entity
+          render json: { errors: @course.errors.full_messages }, status: :unprocessable_entity
         end
-      rescue => e
-        render json: { 
-          debug_error: e.message, 
-          backtrace: e.backtrace.first(5) 
-        }, status: 500
       end
 
       # PATCH/PUT /api/v1/courses/:id
