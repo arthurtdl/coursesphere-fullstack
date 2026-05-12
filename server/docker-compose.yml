@@ -7,6 +7,7 @@ services:
     container_name: ${PROJECT_NAME}-server
     restart: unless-stopped
     env_file: .env
+    command: bundle exec rails server -b 0.0.0.0
     ports:
       - "${SERVER_PORT}:3000"
     volumes:
