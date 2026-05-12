@@ -27,19 +27,20 @@ export function NavBar() {
       <div className="container mx-auto flex h-16 items-center justify-between px-4 sm:px-6 lg:px-8">
         
         {/* Left Side: Logo and Main Nav */}
-        <div className="flex items-center gap-8">
-            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20">
+        <div className="flex items-center gap-4 sm:gap-8">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-500/20 shrink-0">
               <Sparkles className="h-5 w-5" />
             </div>
-            <span className="text-lg font-bold tracking-tight">CourseSphere</span>
+            
+            <span className="text-lg font-bold tracking-tight hidden sm:block">CourseSphere</span>
 
-          <nav className="hidden items-center gap-1 md:flex">
+          <nav className="flex items-center gap-1">
             {navLinks.map(({ to, label, icon: Icon }) => (
               <NavLink
                 key={to}
                 to={to}
                 className={({ isActive }) => `
-                  relative flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium transition-all
+                  relative flex items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium transition-all
                   ${isActive 
                     ? "bg-slate-800 text-white shadow-sm" 
                     : "text-slate-400 hover:bg-slate-800/50 hover:text-slate-200"}
@@ -48,7 +49,7 @@ export function NavBar() {
                 {({ isActive }) => (
                   <>
                     <Icon className={`h-4 w-4 ${isActive ? "text-indigo-400" : ""}`} />
-                    {label}
+                    <span className="hidden sm:inline">{label}</span>
                     {isActive && (
                       <span className="absolute inset-x-4 -bottom-4.25 h-0.5 rounded-full bg-indigo-500 shadow-[0_0_8px_rgba(99,102,241,0.5)]" />
                     )}
@@ -60,19 +61,19 @@ export function NavBar() {
         </div>
 
         {/* Right: User Profile and Logout */}
-        <div className="flex items-center gap-4">
-          <div className="hidden flex-col items-end sm:flex">
-            <p className="text-xs text-slate-500">Bem-vindo,</p>
-            <p className="text-sm font-semibold text-slate-200">{firstName}</p>
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="flex flex-col items-end">
+            <p className="text-[10px] text-slate-500 hidden sm:block">Bem-vindo,</p>
+            <p className="text-xs font-semibold text-slate-200">{firstName}</p>
           </div>
 
-          <div className="h-8 w-px bg-slate-800 hidden sm:block" />
+          <div className="h-8 w-px bg-slate-800" />
 
           <Button
             variant="ghost"
             size="sm"
             onClick={handleLogout}
-            className="text-slate-400 hover:bg-red-700/10 hover:text-indigo-700 cursor-pointer"
+            className="text-slate-400 hover:bg-red-700/10 hover:text-indigo-700 cursor-pointer p-2"
           >
             <LogOut className="h-4 w-4 sm:mr-2" />
             <span className="hidden sm:inline">Sair</span>
